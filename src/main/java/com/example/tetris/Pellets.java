@@ -50,4 +50,14 @@ public class Pellets {
             gc.fillOval(pellet[0], pellet[1], pelletSize, pelletSize);
         }
     }
+    public int counter(){
+        int count=0;
+        for(int i=0;i<pellets.size();i++){
+            for(int j=0;j<pellets.size();j++){
+                count+=i;
+                count+=j;
+            }
+        }
+        return count;
+    }
 }

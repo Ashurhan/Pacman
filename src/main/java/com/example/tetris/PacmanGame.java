@@ -21,11 +21,13 @@ public class PacmanGame extends Application {
     private static final int ENEMY_SIZE = 40;
     private static final int ENEMY_SPEED = 2;
 
+
     private final Set<KeyCode> pressedKeys = new HashSet<>();
     private Walls walls;
     private Pellets pellets;
     private Enemies enemies;
     private Pacman pacman;
+    private Game game ;
 
     public static void main(String[] args) {
         launch(args);
@@ -46,6 +48,7 @@ public class PacmanGame extends Application {
 
         pellets = new Pellets(gc, WIDTH, HEIGHT, PLAYER_SIZE, PELLET_SIZE);
         pellets.initializePellets(walls);
+        pellets.counter();
 
         enemies = new Enemies(gc, PLAYER_SIZE, ENEMY_SIZE, ENEMY_SPEED);
         enemies.initializeEnemies(walls);
@@ -71,7 +74,9 @@ public class PacmanGame extends Application {
                 if (!walls.getMaze()[i][j]) {
                     return new Pacman(gc,
                             i * PLAYER_SIZE,
-                            j * PLAYER_SIZE
+                            j * PLAYER_SIZE,
+                            5
+
                     );
                 }
             }
@@ -81,7 +86,7 @@ public class PacmanGame extends Application {
 
     private void update() {
         pacman.update(pressedKeys, walls);
-        enemies.update(pacman, walls);
+        enemies.update(pacman, walls,game);
         pellets.checkCollision(pacman);
     }
 

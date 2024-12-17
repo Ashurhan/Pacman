@@ -13,15 +13,17 @@ public class Pacman {
     private final GraphicsContext gc;
     private double playerX;
     private double playerY;
-    private final double playerSpeed = 5;
+    private final double playerSpeed ;
     private double mouthAngle = 0;
     private boolean mouthOpening = true;
     private double mouthDirection = 90;
+    private boolean ismoving=true;
 
-    public Pacman(GraphicsContext gc,double playerX, double playerY) {
+    public Pacman(GraphicsContext gc,double playerX, double playerY,int playerSpeed) {
         this.gc = gc;
         this.playerX = playerX;
         this.playerY = playerY;
+        this.playerSpeed = playerSpeed;
     }
     public void draw() {
         gc.setFill(Color.YELLOW);
@@ -32,42 +34,45 @@ public class Pacman {
     }
 
     public void update(Set<KeyCode> pressedKeys, Walls walls) {
-        if (pressedKeys.contains(KeyCode.LEFT)) {
-            if (!isCollision(playerX - playerSpeed, playerY, walls)) {
-                playerX -= playerSpeed;
-                mouthDirection = 180;
+        if(ismoving){
+            if (pressedKeys.contains(KeyCode.LEFT)) {
+                if (!isCollision(playerX - playerSpeed, playerY, walls)) {
+                    playerX -= playerSpeed;
+                    mouthDirection = 180;
+                }
             }
-        }
-        if (pressedKeys.contains(KeyCode.RIGHT)) {
-            if (!isCollision(playerX + playerSpeed, playerY, walls)) {
-                playerX += playerSpeed;
-                mouthDirection = 0;
+            if (pressedKeys.contains(KeyCode.RIGHT)) {
+                if (!isCollision(playerX + playerSpeed, playerY, walls)) {
+                    playerX += playerSpeed;
+                    mouthDirection = 0;
+                }
             }
-        }
-        if (pressedKeys.contains(KeyCode.UP)) {
-            if (!isCollision(playerX, playerY - playerSpeed, walls)) {
-                playerY -= playerSpeed;
-                mouthDirection = 90;
+            if (pressedKeys.contains(KeyCode.UP)) {
+                if (!isCollision(playerX, playerY - playerSpeed, walls)) {
+                    playerY -= playerSpeed;
+                    mouthDirection = 90;
+                }
             }
-        }
-        if (pressedKeys.contains(KeyCode.DOWN)) {
-            if (!isCollision(playerX, playerY + playerSpeed, walls)) {
-                playerY += playerSpeed;
-                mouthDirection = 270;
+            if (pressedKeys.contains(KeyCode.DOWN)) {
+                if (!isCollision(playerX, playerY + playerSpeed, walls)) {
+                    playerY += playerSpeed;
+                    mouthDirection = 270;
+                }
+            }
+
+            if (mouthOpening) {
+                mouthAngle += 2;
+                if (mouthAngle >= 45) {
+                    mouthOpening = false;
+                }
+            } else {
+                mouthAngle -= 2;
+                if (mouthAngle <= 10) {
+                    mouthOpening = true;
+                }
             }
         }
 
-        if (mouthOpening) {
-            mouthAngle += 2;
-            if (mouthAngle >= 45) {
-                mouthOpening = false;
-            }
-        } else {
-            mouthAngle -= 2;
-            if (mouthAngle <= 10) {
-                mouthOpening = true;
-            }
-        }
     }
 
     private boolean isCollision(double x, double y, Walls walls) {
@@ -91,6 +96,9 @@ public class Pacman {
 
     public double getPlayerY() {
         return playerY;
+    }
+    public void stop(){
+        ismoving=false;
     }
 }
 
